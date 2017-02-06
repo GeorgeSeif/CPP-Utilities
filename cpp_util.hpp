@@ -266,6 +266,27 @@ namespace math_utils
 		return (atan(complex_num.imag() / (complex_num.real())) * 180 / constants::PI);
 	}
 
+	// Compute the factorial
+	inline int factorial(int num)
+	{
+		int fact = std::tgamma(num + 1);
+		return fact;
+	}
+
+	// Compute number of possible permutations
+	inline int permutations(int set_size, int subset_size)
+	{
+		int perm = factorial(set_size) / factorial(set_size - subset_size);
+		return perm;
+	}
+
+	// Compute number of possible combinations
+	inline int combinations(int set_size, int subset_size)
+	{
+		int comb = factorial(set_size) / (factorial(subset_size) * factorial(set_size - subset_size));
+		return comb;
+	}
+
 }
 
 namespace str_utils
