@@ -40,6 +40,8 @@ Below is a list of all of the included constants and functions.
 6. Number of possible combinations
 7. Euclidean Distance 2D
 8. RANSAC line fitting 2D
+9. Vector data normalization
+10. Linear Regression
 
 ## String Utility Functions
 1. Convert to lower case

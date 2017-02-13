@@ -18,6 +18,7 @@
 #include <complex>
 #include <iterator>
 #include <list>
+#include <tuple>
 
 using namespace std::complex_literals;
 
@@ -359,6 +360,63 @@ namespace math_utils
 		std::pair<float, float> best_line_params = std::make_pair(best_slope, best_y_intercept);
 
 		return best_line_params;
+	}
+
+	// Normalize data to have zero mean and unit variance
+	inline std::vector<float> normalize_data(std::vector<float> data)
+	{
+		float mean_val = arr_utils::array_avg(data);
+		float standard_dev = arr_utils::array_standard_deviation(data);
+		std::vector<float> normalized_data(data.size());
+
+		for (int i = 0; i < normalized_data.size(); i++)
+		{
+			normalized_data.at(i) = (data.at(i) - mean_val) / standard_dev;
+		}
+
+		return normalized_data;
+	}
+
+	// Linear Regression 
+	inline std::pair<float, float> linear_regression(std::vector<std::pair<float, float>> data, int num_iters = 10, float learning_rate = 0.01)
+	{
+		// Initialize the weights and bias
+		float theta_0 = 0;
+		float theta_1 = 0;
+
+		// First normalize the input data
+		std::vector<float> input_data(data.size());
+		std::vector<float> output_labels(data.size());
+
+		for (int i = 0; i < data.size(); i++)
+		{
+			input_data.at(i) = data.at(i).first;
+			output_labels.at(i) = data.at(i).second;
+		}
+
+		std::vector<float> normalized_input_data = normalize_data(input_data);
+		std::vector<float> normalized_output_labels = normalize_data(output_labels);
+
+		// Gradient descent 
+		int m = normalized_input_data.size();
+		for (int i = 0; i < num_iters; i++)
+		{
+			float theta_0_update = 0;
+			float theta_1_update = 0;
+			for(int j = 0; j < m; j++)
+			{
+				float prediction = normalized_input_data.at(j) * theta_1 + theta_0;
+				float error = prediction - normalized_output_labels.at(j);
+				theta_0_update += error;
+				theta_1_update += error * normalized_input_data.at(j);
+			}
+			theta_0 -= (learning_rate / m) * theta_0_update;
+			theta_1 -= (learning_rate / m) * theta_1_update;
+		}
+
+		std::pair<float, float> final_weights = std::make_pair(theta_0, theta_1);
+		return final_weights;
+
 	}
 
 }
