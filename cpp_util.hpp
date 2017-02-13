@@ -17,6 +17,7 @@
 #include <utility>  
 #include <complex>
 #include <iterator>
+#include <list>
 
 using namespace std::complex_literals;
 
@@ -285,6 +286,74 @@ namespace math_utils
 	{
 		int comb = factorial(set_size) / (factorial(subset_size) * factorial(set_size - subset_size));
 		return comb;
+	}
+
+	// Euclidean distance between 2D points
+	inline float euclidean_dist_2d(std::pair<float, float> point_1, std::pair<float, float> point_2)
+	{
+		float x_dist = pow(point_1.first - point_2.first, 2);
+		float y_dist = pow(point_1.second - point_2.second, 2);
+		float dist = sqrt(x_dist + y_dist);
+		return dist;
+	}
+
+	// RANSAC line fitting algorithm for a vector of 2D points
+	inline std::pair<float, float> ransac_2d(std::vector<std::pair<float, float>> data, int num_iters=10, float thresh_dist=5, float inlier_ratio=0.5)
+	{
+		// data: a 2xn dataset with #n data points
+		// num: the minimum number of points. 
+		// num_iters : the number of iterations
+		// thresh_dist : the threshold of the distances between points and the fitting line
+		// inlier_ratio : the threshold of the number of inliers
+
+		int best_inlier_num = 0;
+		float best_slope = 0;
+		float best_y_intercept = 0;
+
+		for (int i = 0; i < num_iters; i++)
+		{
+			// Randomly select two points
+			std::random_shuffle(std::begin(data), std::end(data));
+			std::pair<float, float> point_1 = data.at(0);
+			std::pair<float, float> point_2 = data.at(1);
+
+			// Based on the randomly selected points, compute a temporary line model
+			float temp_slope = (point_2.second - point_1.second) / (point_2.first - point_1.first);
+			float temp_y_intercept = point_2.second - (temp_slope * point_2.first);
+
+			// Compute the distance between all points and the temporary fitting line
+			std::vector<float> distances;
+			for (int j = 0; j < data.size(); j++)
+			{
+				std::pair<float, float> actual_pos = data.at(j);
+				std::pair<float, float> fitted_pos = std::make_pair(data.at(0).first, data.at(0).first * temp_slope + temp_y_intercept);
+				float curr_dist = euclidean_dist_2d(actual_pos, fitted_pos);
+				distances.push_back(curr_dist);
+			}
+
+			// Compute the inliers with distances smaller than the threshold
+			int inliers_count = 0;
+			for (int j = 0; j < distances.size(); j++)
+			{
+				if (distances.at(j) <= thresh_dist)
+				{
+					inliers_count += 1;
+				}
+			}
+
+			// Update the number of inliers and fitting model if better model is found 
+			if (inliers_count >= round(inlier_ratio * data.size()) && inliers_count > best_inlier_num)
+			{
+				best_inlier_num = inliers_count;
+				best_slope = temp_slope;
+				best_y_intercept = temp_y_intercept;
+			}
+
+		}
+
+		std::pair<float, float> best_line_params = std::make_pair(best_slope, best_y_intercept);
+
+		return best_line_params;
 	}
 
 }
