@@ -50,7 +50,7 @@ namespace cpp_help
 			<< given_string << std::endl;
 	}
 
-	// Print an array
+	// Print an array or vector
 	template <class T>
 	T print_arr(T arr)
 	{
@@ -62,6 +62,11 @@ namespace cpp_help
 		return static_cast<T>(NULL);
 	}
 
+	template <class T>
+	T print_pair(T input_pair)
+	{
+		std::cout << '(' << input_pair.first << ", " << input_pair.second << ")\n";
+	}
 }
 
 namespace arr_utils
@@ -380,7 +385,7 @@ namespace str_utils
 		}
 	}
 
-	// Outputs puts doubles/floats with "n" significant digits
+	// Outputs doubles/floats with "n" significant digits
 	template <typename T>
 	std::string to_string_with_precision(const T a_value, const int n = 6)
 	{
