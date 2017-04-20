@@ -68,10 +68,24 @@ namespace cpp_help
 	{
 		std::cout << '(' << input_pair.first << ", " << input_pair.second << ")\n";
 	}
+
+	inline void print_bool(bool tf)
+	{
+		if (tf)
+		{
+			std::cout << "TRUE" << std::endl;
+		}
+		else
+		{
+			std::cout << "FALSE" << std::endl;
+		}
+		
+	}
 }
 
 namespace arr_utils
 {
+
 	// Insertion sort sorting algorithm
 	template <class T>
 	T insertion_sort(T arr)
@@ -95,7 +109,7 @@ namespace arr_utils
 		return (arr);
 	}
 
-	// Merge to sorted arrays
+	// Merge two sorted arrays
 	// arr is an array and p, q, and r are indices into the array such that p <= q < r.
 	template <class T>
 	T merge(T arr, int p, int q, int r)
@@ -224,6 +238,13 @@ namespace arr_utils
 			std::back_inserter(arr_intersection));
 
 		return arr_intersection;
+	}
+
+	// Check if a vector contains a certain value
+	template <class T>
+	inline bool vec_contains_val(std::vector<T> vec, T val)
+	{
+		return (std::find(std::begin(vec), std::end(vec), val)) != std::end(vec);
 	}
 }
 

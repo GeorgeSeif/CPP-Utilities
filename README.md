@@ -22,6 +22,7 @@ Below is a list of all of the included constants and functions.
 1. Logging function
 2. Print vector
 3. Print pair
+4. Print boolean as TRUE or FALSE
 
 ## Array Utility Functions
 1. Insertion Sort Algorithm
@@ -30,6 +31,7 @@ Below is a list of all of the included constants and functions.
 4. Median value of array or vector
 5. Standard deviation of array or vector
 6. Intersection between two arrays or vectors
+7. Check if a vector contains a certain value
 
 ## Math Utility Functions
 1. Quadratic equation solver
